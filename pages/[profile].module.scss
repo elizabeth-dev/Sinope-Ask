@@ -1,0 +1,84 @@
+.root {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	background: rgb(0,159,253);
+	background: linear-gradient(180deg, rgba(0,159,253,1) 0%, rgba(42,42,114,1) 100%);
+	justify-content: flex-start;
+	align-items: stretch;
+	padding: 32px;
+	.form {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		align-items: stretch;
+		justify-content: flex-start;
+		.questionBox {
+			position: relative;
+			display: flex;
+			align-items: center;
+
+			$avatar_size_sm: 64px;
+			$avatar_size_lg: 128px;
+
+			.avatar {
+				position: absolute;
+				top: 12px;
+				left: 12px;
+				align-self: flex-start;
+				border-radius: 50%;
+				height: $avatar_size_sm;
+				width: $avatar_size_sm;
+				z-index: 10;
+			}
+			.input {
+				flex-grow: 1;
+				position: relative;
+				box-sizing: border-box;
+				padding: 12px 12px 12px 24px + $avatar_size_sm;
+				min-height: $avatar_size_sm + 24px;
+				max-height: 240px;
+
+				border: none;
+				border-radius: 6px;
+
+				resize: none;
+
+				&:focus {
+					outline: none;
+				}
+				&::placeholder {
+					font-family: Roboto, sans-serif;
+
+				}
+			}
+
+			@media screen and (min-width: 768px) {
+				.avatar {
+					height: $avatar_size_lg;
+					width: $avatar_size_lg;
+				}
+
+				.input {
+					padding: 8px 8px 8px 8px + $avatar_size_lg;
+					min-height: $avatar_size_lg + 16px;
+				}
+			}
+		}
+		.send {
+			margin: 8px 0;
+			padding: 8px 16px;
+			border: 0;
+			border-radius: 4px;
+			background-color: #dee2e6;
+			align-self: flex-start;
+			display: flex;
+
+			.sendIcon {
+				height: 24px;
+				width: 24px;
+				color: #343a40;
+			}
+		}
+	}
+}

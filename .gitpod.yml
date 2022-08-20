@@ -6,6 +6,7 @@ jetbrains:
       version: both
     plugins:
       - com.github.copilot
+      - com.intellij.lang.jsgraphql
 
 tasks:
   - init: yarn install && yarn run build
