@@ -1,0 +1,13 @@
+.root {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	background: rgb(0,159,253);
+	background: linear-gradient(180deg, rgba(0,159,253,1) 0%, rgba(42,42,114,1) 100%);
+	justify-content: center;
+	align-items: center;
+	padding: 32px;
+	color: #ffffff;
+	font-family: "Roboto", sans-serif;
+	font-size: 18px;
+}
