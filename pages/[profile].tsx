@@ -1,9 +1,12 @@
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, PreviewData } from 'next';
 import styles from './[profile].module.scss';
 import { FormEventHandler, useState } from 'react';
 import client from '../core/graphql/client';
 import { gql, useMutation } from '@apollo/client';
 import classNames from 'classnames';
+import Head from 'next/head';
+import aaa from 'next/'
+import Image from 'next/image';
 
 const SEND_QUESTION_MUTATION = gql`
 	mutation sendQuestion($recipient: String!, $content: String!) {
@@ -16,9 +19,10 @@ const TOAST_MS = 5000;
 export interface ProfilePageProps {
 	avatarUrl: string;
 	profileID: string;
+	profileTag: string;
 }
 
-export default function ProfilePage({ avatarUrl, profileID }: ProfilePageProps) {
+export default function ProfilePage({ avatarUrl, profileID, profileTag }: ProfilePageProps) {
 	const [toast, setToast] = useState(false);
 	const [error, setError] = useState(true);
 	const [_sendQuestion, { loading }] = useMutation(SEND_QUESTION_MUTATION);
@@ -61,6 +65,10 @@ export default function ProfilePage({ avatarUrl, profileID }: ProfilePageProps) 
 
 	return (
 		<div className={styles.root}>
+			<Head>
+				<title>{profileTag} - Sinope Ask</title>
+				<link rel="icon" href={avatarUrl} />
+			</Head>
 			<form onSubmit={sendQuestion} className={styles.form}>
 				<div className={styles.questionBox}>
 					<img className={styles.avatar} src={avatarUrl} alt="Avatar" />
@@ -94,7 +102,7 @@ export default function ProfilePage({ avatarUrl, profileID }: ProfilePageProps) 
 									d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z"
 								/>
 							</svg>
-							<span>'Sent!'</span>
+							<span>Sent!</span>
 						</div>
 						<div
 							className={classNames({
@@ -109,7 +117,7 @@ export default function ProfilePage({ avatarUrl, profileID }: ProfilePageProps) 
 									d="M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z"
 								/>
 							</svg>
-							<span>'Unexpected error'</span>
+							<span>Unexpected error</span>
 						</div>
 					</div>
 				</div>
@@ -118,11 +126,11 @@ export default function ProfilePage({ avatarUrl, profileID }: ProfilePageProps) 
 	);
 }
 
-export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async ({ params }: GetServerSidePropsContext<{profile: string}, PreviewData>) => {
 	const { profile } = params;
 
 	try {
-		const { data, errors, error } = await client.query({
+		const { data, errors, error } = await client.query<{profile: {avatar: string, ID: string}}>({
 			query: gql`
 				query Profile($profileTag: String!) {
 					profile(tag: $profileTag) {
@@ -136,7 +144,7 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async ({
 			},
 		});
 
-		return { props: { avatarUrl: data.profile.avatar, profileID: data.profile.ID } };
+		return { props: { avatarUrl: data.profile.avatar, profileID: data.profile.ID, profileTag: profile } };
 	} catch (e) {
 		console.log(e);
 		return { notFound: true };
