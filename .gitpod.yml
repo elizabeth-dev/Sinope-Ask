@@ -1,4 +1,4 @@
-image: elizabethdev/gitpod:sinope_ask
+image: elizabethdev/gitpod:sinope_neon
 
 jetbrains:
   intellij:
@@ -9,5 +9,5 @@ jetbrains:
       - com.intellij.lang.jsgraphql
 
 tasks:
-  - init: yarn install && yarn run build
+  - init: yarn install
     command: yarn run dev
